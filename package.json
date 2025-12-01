@@ -1,0 +1,7 @@
+{
+  "name": "2025",
+  "packageManager": "yarn@4.11.0",
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
