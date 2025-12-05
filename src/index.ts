@@ -1,10 +1,12 @@
-import { day1 } from "./day1/day1.js";
-import { getInput } from "./utils/textTools.js";
+import { day1 } from "./day1/day1";
+import { day2 } from "./day2/day2";
+import { getInput } from "./utils/textTools";
 
-type days = 1;
+type days = 1 | 2;
 
 const entrypoints: Record<days, (input: string[]) => unknown> = {
   1: day1,
+  2: day2,
 };
 
 const runDay = async (day: days) => {
@@ -13,4 +15,4 @@ const runDay = async (day: days) => {
   return handler(input);
 };
 
-console.log("results are:", await runDay(1));
+console.log("results are:", await runDay(2));
