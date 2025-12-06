@@ -1,7 +1,7 @@
 export const day3 = (input: string[]) => {
     const part1Result: number = part1(input);
     const part2Result: number = part2(input);
-    return { part1: part1Result, part2: part2Result };
+    return { part1: part1Result, part2: BigInt(part2Result).toString() };
 };
 
 export const getMaxJoltage = (input: string): number => {
@@ -21,6 +21,25 @@ export const getMaxJoltage = (input: string): number => {
     return parseInt(firstValue.toString() + secondValue.toString());
 
 }
+
+export const returnBiggestNumber = (input: string): number => {
+    const batteryArray: number[] = input.split("").map((v) => parseInt(v, 10));
+    if (batteryArray.length <= 3) {
+        throw new Error("Array must contain more than three elements.");
+    };
+    const iters = batteryArray.length - 12;
+    for (let i = 0; i < iters; i++) {
+        for (let j = 0; j < batteryArray.length - 1; j++) {
+            if (batteryArray[j]! < batteryArray[j+1]!) {
+                batteryArray.splice(j, 1);
+                break;
+            } else if (j === batteryArray.length - 2) {
+                batteryArray.pop();
+            }
+        }
+    }
+    return parseInt(batteryArray.reduce((acc, val) => acc + val.toString(), ""));
+};
     
 
 
@@ -35,6 +54,9 @@ export const part1 = (input: string[]): number => {
 };
 
 export const part2 = (input: string[]): number => {
-    // Implement the logic for part 2 here
-    return 0;
+    let sum = 0;
+    for (const line of input) {
+        sum += returnBiggestNumber(line);
+    }
+    return sum;
 };
