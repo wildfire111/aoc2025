@@ -23,22 +23,11 @@ describe("getMaxJoltage", () => {
 });
 
 describe("returnBiggestNumber", () => {
-    it("removes three lowest values and returns concatenated result", () => {
-        expect(() => day3.returnBiggestNumber("123")).toThrowError("Array must contain more than three elements.");
-        expect(day3.returnBiggestNumber("123451111111")).toEqual(45);
-        expect(day3.returnBiggestNumber("543211111111")).toEqual(54);
-        expect(day3.returnBiggestNumber("987654321011")).toEqual(9876543);
-        expect(day3.returnBiggestNumber("1111222233334444")).toEqual(1222233334444);
-    }  );
     it("matches example output", () => {
         expect(day3.returnBiggestNumber("987654321111111")).toEqual(987654321111);
         expect(day3.returnBiggestNumber("811111111111119")).toEqual(811111111119);
         expect(day3.returnBiggestNumber("234234234234278")).toEqual(434234234278);
         expect(day3.returnBiggestNumber("818181911112111")).toEqual(888911112111);
-    });
-    it("matches edge cases", () => {
-        expect(day3.returnBiggestNumber("195211111111")).toEqual(95);
-        expect(day3.returnBiggestNumber("543991111111")).toEqual(99);
     });
 });
 
