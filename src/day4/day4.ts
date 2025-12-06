@@ -18,9 +18,9 @@ export const isAccessible = (grid: string[][], row: number, col: number): boolea
     for (const [plusY, plusX] of coordOffsets) {
         if (hasRoll(grid, row + plusY, col + plusX)) {
             rolls++;
-            console.log(`${row}, ${col} has roll at ${row + plusY}, ${col + plusX}. Total rolls: ${rolls}`);
+            //console.log(`${row}, ${col} has roll at ${row + plusY}, ${col + plusX}. Total rolls: ${rolls}`);
         } else {
-            console.log(`${row}, ${col} has NO roll at ${row + plusY}, ${col + plusX}. Total rolls: ${rolls}`);
+            //console.log(`${row}, ${col} has NO roll at ${row + plusY}, ${col + plusX}. Total rolls: ${rolls}`);
         }
         if (rolls >= 4) {
             return false;
@@ -37,12 +37,12 @@ export const hasRoll = (grid: string[][], row: number, col: number): boolean => 
     }
     const numCols = grid[0].length;
     if (row < 0 || row >= numRows || col < 0 || col >= numCols) {
-        console.log(`hasRoll: (${row}, ${col}) is out of bounds, hasRoll = false`);
+        //console.log(`hasRoll: (${row}, ${col}) is out of bounds, hasRoll = false`);
         return false;
         
     }
     if(!grid[row]) return false;
-    console.log(`hasRoll: (${row}, ${col}) is ${grid[row][col]}, hasRoll = ${grid[row][col] === "@"}`);
+    //console.log(`hasRoll: (${row}, ${col}) is ${grid[row][col]}, hasRoll = ${grid[row][col] === "@"}`);
     return grid[row][col] === "@";
 };
 
@@ -60,11 +60,48 @@ export const markXAccessible = (grid: string[][]): string[][] => {
     return newGrid;
 };
 
+const countXs = (grid: string[][]): number => {
+    let count = 0;
+    for (let r = 0; r < grid.length; r++) {
+        for (let c = 0; c < grid[0]!.length; c++) {
+            if (grid[r]![c] === "x") {
+                count++;
+            }
+        }
+    }
+    return count;
+};
+
+const removeXs = (grid: string[][]): string[][] => {
+    const newGrid = grid.map(r => Array(r.length).fill(""));
+    for (let r = 0; r < grid.length; r++) {
+        for (let c = 0; c < grid[0]!.length; c++) {
+            if (grid[r]![c] === "x") {
+                newGrid[r]![c] = ".";
+            } else {
+                newGrid[r]![c] = grid[r]![c];
+            }
+        }
+    }
+    return newGrid;
+};
 
 export const part1 = (input: string[]): number => {
-    return 0;
+    const grid = buildGrid(input);
+    const markedGrid = markXAccessible(grid);
+    return countXs(markedGrid);
 };
 
 export const part2 = (input: string[]): number => {
-    return 0;
+    let grid = buildGrid(input);
+    let removedThisRound = -1;
+    let removedTotal = 0;
+    while (removedThisRound !== 0) {
+        const markedGrid = markXAccessible(grid);
+        removedThisRound = countXs(markedGrid);
+        grid = removeXs(markedGrid);
+        removedTotal += removedThisRound;
+        console.log(`Removed this round: ${removedThisRound}, total removed: ${removedTotal}`);
+    }
+    return removedTotal;
 };
