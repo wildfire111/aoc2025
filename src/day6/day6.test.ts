@@ -1,12 +1,15 @@
 import * as day6 from "./day6.js";
 
 let input: string[][] = [];
+let inputPart2: string[];
 
 beforeEach(() => {
-    input = day6.parseInput(`123 328  51 64 
+    const inputStr = `123 328  51 64 
  45 64  387 23 
   6 98  215 314
-*   +   *   +  `.split("\n"));
+*   +   *   +  `;
+    input = day6.parseInput(inputStr.split("\n"));
+    inputPart2 = inputStr.split("\n");
 });
 
 describe("extractEquations", () => {
@@ -51,5 +54,24 @@ describe("sumEquations", () => {
         const equations = day6.extractEquations(input);
         const sum = day6.sumEquations(equations);
         expect(sum).toBe(4277556);
+    });
+});
+
+describe("parseInputPreserveSpaces", () => {
+    test("correctly parses input while preserving spaces", () => {
+        const {parsedNumsArray, operatorArray} = day6.parseInputPreserveSpaces(inputPart2);
+        expect(parsedNumsArray[0]!).toEqual(["123", "328", " 51", "64 "]);
+        expect(parsedNumsArray[1]!).toEqual([" 45", "64 ", "387", "23 "]);
+        expect(parsedNumsArray[2]!).toEqual(["  6", "98 ", "215", "314"]);
+        expect(operatorArray).toEqual(["*", "+", "*", "+"]);
+    });
+});
+
+describe("extractNumbersP2", () => {
+    test("correctly extracts numbers for part 2", () => {
+        const {parsedNumsArray} = day6.parseInputPreserveSpaces(inputPart2);
+        const numArrays = day6.extractNumbersP2(parsedNumsArray);
+        expect(numArrays[0]!).toEqual([356, 24,1]);
+        expect(numArrays[1]!).toEqual([8, 248, 369]);
     });
 });

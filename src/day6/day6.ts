@@ -9,6 +9,74 @@ export const parseInput = (input: string[]): string[][] => {
     return parsedInput;
 };
 
+
+
+export const parseOperators = (operatorString: string): {spacing: number[], operators: string[]} => {
+    let chars = operatorString.split("");
+    const spacing: number[] = [];
+    const operators: string[] = [];
+    let count = 0;
+    operators.push(chars[0]!); //first character is always an operator
+    chars = chars.slice(1);
+    for (const char of chars) {
+        if (char === " ") {
+            count++;
+        } else {
+            spacing.push(count);
+            operators.push(char);
+            count = 0;
+        }
+    }
+    spacing.push(count+1); // push the last count
+    return {spacing, operators};
+};
+
+export const parseInputPreserveSpaces = (input: string[]): {parsedNumsArray: string[][], operatorArray: string[]} => {
+    const operatorString: string = input.pop()!;
+    const {spacing, operators} = parseOperators(operatorString);
+    const parsedNumsArray: string[][] = [];
+    for(let line of input) {
+        const numStrArray: string[] = [];
+        for (let i = 0; i < spacing.length; i++) {
+            const spaceCount = spacing[i]!;
+            const numStr = line.slice(0, spaceCount);
+            console.log(`Extracted numStr: "${numStr}" from line: "${line}" with spaceCount: ${spaceCount}`);
+            line = line.slice(spaceCount + 1);
+            if (numStr.length > 0) {
+                numStrArray.push(numStr);
+            }
+        }
+        parsedNumsArray.push(numStrArray);
+    }
+    return {parsedNumsArray: parsedNumsArray, operatorArray: operators};
+
+}
+
+export const extractNumbersP2 = (numStrArray: string[][]): number[][] => {
+    const numArray: number[][] = [];
+    if (numStrArray.length === 0 || numStrArray[0]!.length === 0) throw new Error("Input array is empty.");
+    for (let i = 0; i < numStrArray[0]!.length; i++) { //iter over columns
+        const strsToParse: string[] = [];
+        for (let r = 0; r < numStrArray.length; r++) { //grab each row's ith element
+            strsToParse.push(numStrArray[r]![i]!);
+        }
+        const numChars = strsToParse[0]!.length;
+        const strNums: string[] = [];
+        for (let m = numChars - 1; m >= 0; m--) { //iter over characters in string number
+            let numAsString = "";
+            for (const str of strsToParse) {
+                numAsString = numAsString + str[m];
+            }
+            strNums.push(numAsString.trim());
+        }
+        const parsedNums: number[] = strNums.map(numStr => parseInt(numStr, 10));
+        numArray.push(parsedNums);
+    }
+    return numArray;
+
+
+}
+
 export const extractEquations = (input2d: string[][]): {numarray: number[], operator: string}[] => {
     const operatorArray: string[] = input2d[input2d.length - 1] as string[];
     const numarray: number[][] = [];
@@ -44,6 +112,7 @@ export const extractEquations = (input2d: string[][]): {numarray: number[], oper
 
 
 
+
 export const solveEquation = (equation: {numarray: number[], operator: string}): number => {
     const {numarray, operator} = equation;
     switch(operator) {
@@ -72,5 +141,13 @@ export const part1 = (input2d: string[]): number => {
 };
 
 export const part2 = (input2d: string[]): number => {
-    return 0;
+    const {parsedNumsArray, operatorArray} = parseInputPreserveSpaces(input2d);
+    const numArray = extractNumbersP2(parsedNumsArray);
+    const equations: {numarray: number[], operator: string}[] = [];
+    for (let i = 0; i < operatorArray.length; i++) {
+        const nums: number[] = numArray[i]!;
+        const operator = operatorArray[i]!;
+        equations.push({numarray: nums, operator});
+    }
+    return sumEquations(equations);
 };
