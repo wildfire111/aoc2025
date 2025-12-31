@@ -8,9 +8,10 @@ import { day7 } from "./day7/day7";
 import { day8 } from "./day8/day8";
 import { day9 } from "./day9/day9";
 import { day10 } from "./day10/day10";
+import { day11 } from "./day11/day11";
 import { getInput } from "./utils/textTools";
 
-type days = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+type days = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
 
 const entrypoints: Record<days, (input: string[]) => unknown> = {
   1: day1,
@@ -22,7 +23,8 @@ const entrypoints: Record<days, (input: string[]) => unknown> = {
   7: day7,
   8: day8,
   9: day9,
-  10: day10
+  10: day10,
+  11: day11
 };
 
 const runDay = async (day: days) => {
@@ -31,4 +33,4 @@ const runDay = async (day: days) => {
   return handler(input);
 };
 
-console.log("results are:", await runDay(10));
+console.log("results are:", await runDay(11));
